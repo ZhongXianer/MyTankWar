@@ -1,7 +1,10 @@
 package tank;
 
+import obstacle.Obstacle;
+
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 
 public class TankofPlayer extends Tank {
     /*
@@ -15,17 +18,46 @@ public class TankofPlayer extends Tank {
 
     @Override
     public void move() {
-        //根据从键盘获得的点击事件移动
     }
     public void move(KeyEvent keyEvent,Graphics graphics){
-        /*第一步先把当前坦克所在的模块清成背景颜色*/
+        /*先把当前坦克所在的模块清成背景颜色*/
         drawbBlack(graphics);
         /*获得键盘点击事件并改变坦克的运动方向*/
         getKeyEvent(keyEvent);
+        /*根据坦克的方向判断前面是否有障碍物*/
+
         /*根据当前坦克的方向改变坐标*/
         moveAccordingToDirection();
         /*根据改变后的坐标画出新坦克的位置*/
         draw(graphics);
+    }
+
+    public void judgeObstacle(ArrayList<Obstacle> obstacles){
+        int tempx=this.getX();
+        int tempy=this.getY();
+        switch (this.getDirection()){
+            case STOP:
+                return;
+            case UP:
+                tempy-=50;
+                break;
+            case DOWN:
+                tempy+=50;
+                break;
+            case LEFT:
+                tempx-=50;
+                break;
+            case RIGHT:
+                tempx+=50;
+                break;
+                default:
+        }
+        for (Obstacle o:obstacles){
+            if(tempx==o.getX()&&tempy==o.getY()){
+                this.setDirection(Direction.STOP);
+                break;
+            }
+        }
     }
 
     @Override
@@ -49,6 +81,8 @@ public class TankofPlayer extends Tank {
                 break;
             case RIGHT:
                 this.setX(this.getX()+50);
+                break;
+                default:
         }
     }
 
@@ -69,9 +103,12 @@ public class TankofPlayer extends Tank {
             case 'd':
                 System.out.println("You clicked d");
                 this.setDirection(Direction.RIGHT);
+                break;
                 default:
+                    this.setDirection(Direction.STOP);
         }
     }
+
     @Override
     public void draw(Graphics graphics) {
         graphics.setColor(Color.CYAN);

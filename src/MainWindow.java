@@ -1,4 +1,5 @@
 import obstacle.Obstacle;
+import tank.Base;
 import tank.TankofEnemy;
 import tank.TankofPlayer;
 
@@ -15,6 +16,7 @@ public class MainWindow extends JFrame {
     private ArrayList<Obstacle> obstacles=new ArrayList<>();
     private ArrayList<TankofEnemy> enemyTanks=new ArrayList<>();
     private TankofPlayer playerTank=new TankofPlayer(0,0);
+    private Base base=new Base(350,500);
     /*construct*/
     public MainWindow(){
         super("坦克大战");
@@ -59,6 +61,7 @@ public class MainWindow extends JFrame {
             super.paint(g);
             this.setBackground(Color.black);
             playerTank.draw(g);
+            base.draw(g);
         }
     }
 }

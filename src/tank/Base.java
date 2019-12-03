@@ -20,6 +20,7 @@ public class Base extends Tank {
 
     @Override
     public void draw(Graphics graphics) {
-
+        graphics.setColor(Color.magenta);
+        graphics.fillRect(this.getX(),this.getY(),50,50);
     }
 }
