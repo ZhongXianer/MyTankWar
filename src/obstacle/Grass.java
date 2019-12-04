@@ -1,5 +1,7 @@
 package obstacle;
 
+import Tool.DrawTool;
+
 import java.awt.*;
 
 public class Grass extends Obstacle {
@@ -13,7 +15,6 @@ public class Grass extends Obstacle {
 
     @Override
     public void draw(Graphics graphics) {
-        graphics.setColor(Color.GREEN);
-        graphics.fillRect(this.getX(),this.getY(),50,50);
+        DrawTool.drawImage("grass",this.getX(),this.getY(),graphics);
     }
 }

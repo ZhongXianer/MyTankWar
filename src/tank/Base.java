@@ -1,5 +1,7 @@
 package tank;
 
+import Tool.DrawTool;
+
 import java.awt.*;
 
 public class Base extends Tank {
@@ -20,7 +22,6 @@ public class Base extends Tank {
 
     @Override
     public void draw(Graphics graphics) {
-        graphics.setColor(Color.magenta);
-        graphics.fillRect(this.getX(),this.getY(),50,50);
+        DrawTool.drawImage("base",this.getX(),this.getY(),graphics);
     }
 }

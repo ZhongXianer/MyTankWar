@@ -1,4 +1,6 @@
+import Tool.DrawTool;
 import obstacle.Obstacle;
+import obstacle.WallCanBeDestroyed;
 import tank.Base;
 import tank.TankofEnemy;
 import tank.TankofPlayer;
@@ -15,11 +17,12 @@ public class MainWindow extends JFrame {
      */
     private ArrayList<Obstacle> obstacles=new ArrayList<>();
     private ArrayList<TankofEnemy> enemyTanks=new ArrayList<>();
-    private TankofPlayer playerTank=new TankofPlayer(0,0);
+    private TankofPlayer playerTank=new TankofPlayer(50,50);
     private Base base=new Base(350,500);
     /*construct*/
     public MainWindow(){
         super("坦克大战");
+
 
         MyPanel panel=new MyPanel();
         this.addKeyListener(new KeyListener() {
@@ -31,7 +34,7 @@ public class MainWindow extends JFrame {
             @Override
             public void keyPressed(KeyEvent e) {
                 System.out.println("press");
-                playerTank.move(e,panel.getGraphics());
+                playerTank.move(e,panel.getGraphics(),obstacles);
             }
 
             @Override
@@ -40,7 +43,6 @@ public class MainWindow extends JFrame {
             }
         });
         this.add(panel);
-
         this.setSize(800,600);
         this.setLocation(200,50);
 
@@ -60,8 +62,22 @@ public class MainWindow extends JFrame {
         public void paint(Graphics g){
             super.paint(g);
             this.setBackground(Color.black);
+            initObstacle();
+            for (Obstacle o:obstacles)
+                DrawTool.drawImage("wallCanBeDestroyed",o.getX(),o.getY(),g);
             playerTank.draw(g);
             base.draw(g);
+        }
+    }
+
+
+    private void initObstacle(){
+        int initialx=100;
+        int initialy=100;
+        for(int i=0;i<5;i++){
+            Obstacle obstacle=new WallCanBeDestroyed(initialx,initialy);
+            obstacles.add(obstacle);
+            initialy+=50;
         }
     }
 }

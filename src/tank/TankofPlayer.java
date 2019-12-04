@@ -1,5 +1,6 @@
 package tank;
 
+import Tool.DrawTool;
 import obstacle.Obstacle;
 
 import java.awt.*;
@@ -19,25 +20,24 @@ public class TankofPlayer extends Tank {
     @Override
     public void move() {
     }
-    public void move(KeyEvent keyEvent,Graphics graphics){
-        /*先把当前坦克所在的模块清成背景颜色*/
-        drawbBlack(graphics);
+    public void move(KeyEvent keyEvent,Graphics graphics,ArrayList<Obstacle> obstacles){
         /*获得键盘点击事件并改变坦克的运动方向*/
-        getKeyEvent(keyEvent);
+        if(getKeyEvent(keyEvent,graphics)==0 && !judgeObstacle(obstacles))
+            moveAccordingToDirection(graphics);
+
         /*根据坦克的方向判断前面是否有障碍物*/
 
         /*根据当前坦克的方向改变坐标*/
-        moveAccordingToDirection();
         /*根据改变后的坐标画出新坦克的位置*/
         draw(graphics);
     }
 
-    public void judgeObstacle(ArrayList<Obstacle> obstacles){
+    public boolean judgeObstacle(ArrayList<Obstacle> obstacles){
         int tempx=this.getX();
         int tempy=this.getY();
         switch (this.getDirection()){
             case STOP:
-                return;
+                return false;
             case UP:
                 tempy-=50;
                 break;
@@ -54,10 +54,10 @@ public class TankofPlayer extends Tank {
         }
         for (Obstacle o:obstacles){
             if(tempx==o.getX()&&tempy==o.getY()){
-                this.setDirection(Direction.STOP);
-                break;
+                return true;
             }
         }
+        return false;
     }
 
     @Override
@@ -65,7 +65,8 @@ public class TankofPlayer extends Tank {
         //根据从键盘获得的点击事件发射子弹
     }
 
-    private void moveAccordingToDirection(){
+    private void moveAccordingToDirection(Graphics graphics){
+        this.drawbBlack(graphics);
         //画图时上下相反
         switch (this.getDirection()){
             case STOP:
@@ -86,33 +87,54 @@ public class TankofPlayer extends Tank {
         }
     }
 
-    private void getKeyEvent(KeyEvent keyEvent){
+    private int getKeyEvent(KeyEvent keyEvent,Graphics graphics){
+        Direction directionBefore=this.getDirection();
+        Direction directionNext;
         switch (keyEvent.getKeyChar()){
             case 'w':
-                System.out.println("You clicked w");
-                this.setDirection(Direction.UP);
+                directionNext=Direction.UP;
                 break;
             case 's':
-                System.out.println("You clicked s");
-                this.setDirection(Direction.DOWN);
+                directionNext=Direction.DOWN;
                 break;
             case 'a':
-                System.out.println("You clicked a");
-                this.setDirection(Direction.LEFT);
+                directionNext=Direction.LEFT;
                 break;
             case 'd':
-                System.out.println("You clicked d");
-                this.setDirection(Direction.RIGHT);
+                directionNext=Direction.RIGHT;
                 break;
                 default:
-                    this.setDirection(Direction.STOP);
+                    directionNext=directionBefore;
+                    return 1;
         }
+        if (directionNext!=directionBefore){
+            this.setDirection(directionNext);
+            draw(graphics);
+            return 1;
+        }
+        return 0;
+
     }
 
     @Override
     public void draw(Graphics graphics) {
-        graphics.setColor(Color.CYAN);
-        graphics.fillRect(this.getX(),this.getY(),50,50);
+        switch (this.getDirection()){
+            case STOP:
+                DrawTool.drawImage("tankright",this.getX(),this.getY(),graphics);
+                break;
+            case UP:
+                DrawTool.drawImage("tankup",this.getX(),this.getY(),graphics);
+                break;
+            case DOWN:
+                DrawTool.drawImage("tankdown",this.getX(),this.getY(),graphics);
+                break;
+            case LEFT:
+                DrawTool.drawImage("tankleft",this.getX(),this.getY(),graphics);
+                break;
+            case RIGHT:
+                DrawTool.drawImage("tankright",this.getX(),this.getY(),graphics);
+                break;
+        }
     }
 
     public void drawbBlack(Graphics graphics){

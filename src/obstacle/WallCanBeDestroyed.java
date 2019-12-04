@@ -1,5 +1,7 @@
 package obstacle;
 
+import Tool.DrawTool;
+
 import java.awt.*;
 
 public class WallCanBeDestroyed extends Obstacle {
@@ -12,7 +14,6 @@ public class WallCanBeDestroyed extends Obstacle {
 
     @Override
     public void draw(Graphics graphics) {
-        graphics.setColor(Color.ORANGE);
-        graphics.fillRect(this.getX(),this.getY(),50,50);
+        DrawTool.drawImage("wallCanBeDestroyed",this.getX(),this.getY(),graphics);
     }
 }
